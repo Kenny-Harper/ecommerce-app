@@ -1,0 +1,451 @@
+/* reset default browser styles — every browser adds its own margin/padding by default */
+* {
+  box-sizing: border-box; /* padding and border are included in element width */
+  margin: 0;
+  padding: 0;
+}
+
+/* base page styles */
+body {
+  font-family: sans-serif;
+  background: #f0f2f5; /* light grey page background */
+  min-height: 100vh;   /* page always fills the full screen height */
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex;                  /* logo and button sit side by side */
+  justify-content: space-between; /* push logo left, button right */
+  align-items: center;            /* vertically centre both */
+  background: white;
+  padding: 16px 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* shadow below header */
+  position: sticky; /* sticks to top of screen when scrolling */
+  top: 0;
+  z-index: 100;     /* sits above product cards when scrolling */
+}
+
+.logo {
+  font-size: 1.5rem;
+}
+
+/* cart button in the header */
+.cart-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #6c63ff; /* purple */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* circular number badge on the cart button */
+/* only rendered when cartCount > 0 */
+.cart-count {
+  background: white;
+  color: #6c63ff;
+  border-radius: 50%; /* makes it a perfect circle */
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* ── CATEGORY FILTERS ── */
+.category-filters {
+  display: flex;
+  gap: 10px;
+  padding: 24px 32px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap; /* wraps to next line on small screens */
+}
+
+/* default filter button — outlined pill shape */
+.category-filters button {
+  padding: 8px 20px;
+  border: 1px solid #ddd;
+  border-radius: 20px; /* pill shape */
+  background: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* active filter button — filled purple */
+/* this class is added dynamically via ternary in JSX */
+.category-filters button.active {
+  background: #6c63ff;
+  color: white;
+  border-color: #6c63ff;
+}
+
+/* ── PRODUCT GRID ── */
+.product-grid {
+  display: grid;
+  /* auto-fill: create as many columns as fit */
+  /* minmax: each column is at least 220px, max 1fr (equal share of space) */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto; /* centres the grid on wide screens */
+}
+
+/* ── PRODUCT CARD ── */
+.product-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* stack image, info and button vertically */
+  gap: 12px;
+}
+
+/* emoji image area */
+.product-image {
+  font-size: 4rem;
+  text-align: center;
+  padding: 16px 0;
+}
+
+.product-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.product-category {
+  color: #888; /* grey — secondary info */
+  font-size: 0.85rem;
+}
+
+.product-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #6c63ff;
+}
+
+/* add to cart button on each product card */
+.add-to-cart-btn {
+  margin-top: auto; /* pushes button to bottom regardless of card content height */
+  padding: 10px;
+  background: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* ── CART SIDEBAR ── */
+.cart-sidebar {
+  position: fixed;  /* fixed to the viewport — doesn't scroll with the page */
+  top: 0;
+  right: 0;
+  width: 380px;
+  height: 100vh;    /* full screen height */
+  background: white;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%); /* starts hidden off screen to the right */
+  transition: transform 0.3s ease; /* smooth slide animation */
+  z-index: 200; /* sits above header and all other content */
+}
+
+/* when isCartOpen is true, App adds the 'open' class */
+/* translateX(0) slides the cart back into view */
+.cart-sidebar.open {
+  transform: translateX(0);
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* the X button that closes the cart */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #888;
+}
+
+/* shown when cart array is empty */
+.empty-cart {
+  padding: 40px 24px;
+  text-align: center;
+  color: #888;
+}
+
+/* scrollable list of cart items */
+.cart-items {
+  list-style: none;
+  overflow-y: auto; /* scroll if items overflow the sidebar height */
+  flex: 1;          /* takes up all space between header and footer */
+  padding: 16px 24px;
+}
+
+/* individual cart item row */
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* emoji image inline with the rest of the row */
+.cart-item-image {
+  font-size: 2rem;
+}
+
+/* name and price stacked vertically */
+.cart-item-details {
+  flex: 1; /* takes remaining space, pushing controls to the right */
+}
+
+.cart-item-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.cart-item-price {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* the - number + quantity control */
+.cart-item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* individual + and - buttons */
+.cart-item-quantity button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* red X button to remove item entirely */
+.remove-btn {
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* total price and checkout button pinned to bottom of cart */
+.cart-footer {
+  padding: 20px 24px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.cart-total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+/* full width purple checkout button */
+.checkout-btn {
+  width: 100%;
+  padding: 14px;
+  background: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* ── CHECKOUT MODAL ── */
+
+/* dark overlay that covers the whole screen */
+.checkout-overlay {
+  position: fixed;
+  inset: 0; /* shorthand for top/right/bottom/left all = 0 */
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 300; /* above everything including the cart sidebar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* the white modal box */
+.checkout-modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.checkout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* scrollable middle section of the modal */
+.checkout-body {
+  overflow-y: scroll;
+  padding: 24px;
+  flex: 1;
+}
+
+/* order summary box at top of checkout */
+.order-summary {
+  background: #f8f8ff;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.order-summary h3 {
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+/* each item row in the summary */
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  padding: 4px 0;
+  color: #555;
+}
+
+.summary-total {
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+  padding-top: 10px;
+  font-size: 1rem;
+}
+
+/* section headings like "Personal Details" */
+.section-title {
+  font-size: 1rem;
+  margin: 20px 0 12px;
+  color: #333;
+}
+
+/* wrapper for each label + input pair */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+/* highlight input border on focus */
+.form-group input:focus {
+  border-color: #6c63ff;
+}
+
+/* two form groups side by side e.g. city + postcode */
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-group {
+  flex: 1; /* each takes equal width */
+}
+
+/* red validation error message */
+.error {
+  color: #ff4d4d;
+  font-size: 0.8rem;
+}
+
+/* sticky footer with place order button */
+.checkout-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* main CTA button */
+.place-order-btn {
+  width: 100%;
+  padding: 14px;
+  background: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ── ORDER CONFIRMATION ── */
+.confirmation {
+  padding: 40px 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.confirmation-icon {
+  font-size: 4rem;
+}
+
+.confirmation h2 {
+  font-size: 1.6rem;
+}
+
+.confirmation p {
+  color: #555;
+}
+
+.confirmation-email {
+  font-size: 0.9rem;
+}
+
+/* order summary inside confirmation screen */
+.confirmation .order-summary {
+  width: 100%;
+  text-align: left;
+}
