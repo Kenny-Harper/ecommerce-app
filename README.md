@@ -2,9 +2,6 @@
 
 A fully functional e-commerce product page built with React and Vite.
 
-## Live Demo
-🔗 https://kenny-harper-ecommerce.netlify.app
-
 ## Features
 - Product grid with category filtering
 - Add to cart with quantity controls
@@ -25,3 +22,6 @@ A fully functional e-commerce product page built with React and Vite.
 - Conditional rendering
 - Array methods (.map, .filter, .find)
 - localStorage persistence
+
+## Live Demo
+🔗 https://kenny-harper-ecommerce.netlify.app
